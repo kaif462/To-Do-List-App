@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>ToDo App - Home</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+<div th:replace="~{navbar :: navbar}"></div>
+
+<!-- Hero -->
+<div class="bg-primary text-white py-5">
+    <div class="container text-center">
+        <h1 class="display-5 fw-bold">Stay on top of your tasks</h1>
+        <p class="lead mb-4">Plan, track and finish what matters, one task at a time.</p>
+        <a th:href="@{/task-form}" class="btn btn-light btn-lg me-2">+ Add Task</a>
+        <a th:href="@{/view-task}" class="btn btn-outline-light btn-lg">View All Tasks</a>
+    </div>
+</div>
+
+<div class="container my-5">
+
+    <!-- Stats -->
+    <div class="row g-3 mb-5 text-center">
+        <div class="col-6 col-md">
+            <a th:href="@{/view-task}" class="text-decoration-none">
+                <div class="card shadow-sm border-0 h-100">
+                    <div class="card-body">
+                        <div class="fs-1 fw-bold text-dark" th:text="${totalCount}">0</div>
+                        <div class="text-muted">Total</div>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-6 col-md">
+            <a th:href="@{/view-task(status='TODO')}" class="text-decoration-none">
+                <div class="card shadow-sm border-0 h-100 border-top border-4 border-secondary">
+                    <div class="card-body">
+                        <div class="fs-1 fw-bold text-secondary" th:text="${todoCount}">0</div>
+                        <div class="text-muted">To Do</div>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-6 col-md">
+            <a th:href="@{/view-task(status='IN_PROGRESS')}" class="text-decoration-none">
+                <div class="card shadow-sm border-0 h-100 border-top border-4 border-warning">
+                    <div class="card-body">
+                        <div class="fs-1 fw-bold text-warning" th:text="${inProgressCount}">0</div>
+                        <div class="text-muted">In Progress</div>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-6 col-md">
+            <a th:href="@{/view-task(status='DONE')}" class="text-decoration-none">
+                <div class="card shadow-sm border-0 h-100 border-top border-4 border-success">
+                    <div class="card-body">
+                        <div class="fs-1 fw-bold text-success" th:text="${doneCount}">0</div>
+                        <div class="text-muted">Done</div>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-12 col-md">
+            <div class="card shadow-sm border-0 h-100 border-top border-4 border-danger">
+                <div class="card-body">
+                    <div class="fs-1 fw-bold text-danger" th:text="${overdueCount}">0</div>
+                    <div class="text-muted">Overdue</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Upcoming tasks -->
+    <div class="card shadow-sm border-0">
+        <div class="card-header bg-white d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">Upcoming tasks</h5>
+            <a th:href="@{/view-task}" class="small">See all</a>
+        </div>
+        <ul class="list-group list-group-flush">
+            <li th:each="task : ${upcoming}"
+                class="list-group-item d-flex justify-content-between align-items-center"
+                th:classappend="${task.overdue} ? 'list-group-item-danger'">
+                <div>
+                    <div class="fw-semibold" th:text="${task.title}">Task title</div>
+                    <small class="text-muted">
+                        Due <span th:text="${task.date}">2026-01-01</span>
+                        <span th:if="${task.overdue}" class="badge bg-danger ms-1">Overdue</span>
+                    </small>
+                </div>
+                <div>
+                    <span class="badge me-2"
+                          th:classappend="${task.status.name() == 'IN_PROGRESS'} ? 'bg-warning text-dark' : 'bg-secondary'"
+                          th:text="${task.status}">TODO</span>
+                    <a th:href="@{/edit/{id}(id=${task.id})}" class="btn btn-sm btn-outline-primary">Edit</a>
+                </div>
+            </li>
+            <li th:if="${#lists.isEmpty(upcoming)}" class="list-group-item text-center text-muted py-4">
+                Nothing pending. <a th:href="@{/task-form}">Add your first task</a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
