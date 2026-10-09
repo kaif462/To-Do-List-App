@@ -7,16 +7,13 @@ import com.project.ToDoList_App.entity.Status;
 import com.project.ToDoList_App.entity.Task;
 
 public interface ITaskService {
+    boolean saveTask(Task task, String username);
+    Optional<Task> getTaskById(Integer id, String username);
+    boolean delete(Integer id, String username);
+    List<Task> searchTasks(String username, Status status, String keyword);
 
-	public void addTask(Task task);
-	public List<Task> fetchAllTask();
-	public void delete(Integer id);
-	
-	public Optional<Task> getTaskById(Integer id);
-	long countByStatus(Status status);
-	long countOverdue();
-	long countAll();
-	List<Task> upcomingTasks();
-	List<Task> searchTasks(Status status, String keyword);
-	
+    long countAll(String username);
+    long countByStatus(String username, Status status);
+    long countOverdue(String username);
+    List<Task> upcomingTasks(String username);
 }
